@@ -14,7 +14,7 @@
 .venv/bin/pip install -e ".[dev]"
 ```
 
-Ставить только с `-e`: путь к `data/` считается от `src/notes.py`.
+Ставить только с `-e`: путь к `data/` считается от `src/notes/database.py`.
 
 ## Запуск
 
@@ -29,6 +29,6 @@
 
 ```
 .venv/bin/pytest -v
-.venv/bin/pytest tests/test_notes.py::test_edit_note_replaces_only_target
+.venv/bin/pytest tests/test_utils.py::test_edit_note_replaces_only_target
 .venv/bin/ruff check src tests
 ```

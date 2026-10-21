@@ -12,10 +12,9 @@ dependencies = []
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
 
-# Код — один модуль src/notes.py, не пакет: по условию задания.
+# Имя пакета (notes) не совпадает с именем проекта (zc-notes) — указать явно.
 [tool.hatch.build.targets.wheel]
-only-include = ["src/notes.py"]
-sources = ["src"]
+packages = ["src/notes"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
