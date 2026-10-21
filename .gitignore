@@ -1,0 +1,11 @@
+# Заметки пользователя — личные данные, не код
+notes.json
+notes.json.tmp
+
+.venv/
+__pycache__/
+*.db
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.DS_Store
