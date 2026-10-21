@@ -50,11 +50,25 @@ def add_note(notes: list[str], text: str) -> list[str]:
     return [*notes, text]
 
 
-def delete_note(notes: list[str], number: int) -> list[str]:
-    """Вернуть новый список без заметки с номером number (нумерация с 1)."""
+def _check_number(notes: list[str], number: int) -> None:
+    """Номер для человека начинается с 1."""
     if not 1 <= number <= len(notes):
         raise ValueError(f"Нет заметки с номером {number}.")
+
+
+def delete_note(notes: list[str], number: int) -> list[str]:
+    """Вернуть новый список без заметки с номером number."""
+    _check_number(notes, number)
     return notes[: number - 1] + notes[number:]
+
+
+def edit_note(notes: list[str], number: int, text: str) -> list[str]:
+    """Вернуть новый список, где заметка с номером number заменена на text."""
+    _check_number(notes, number)
+    text = text.strip()
+    if not text:
+        raise ValueError("Заметка не может быть пустой.")
+    return [*notes[: number - 1], text, *notes[number:]]
 
 
 def format_notes(notes: list[str]) -> str:
@@ -68,7 +82,16 @@ MENU = """
 1 — добавить заметку
 2 — показать все
 3 — удалить по номеру
+4 — изменить по номеру
 0 — выход"""
+
+
+def parse_number(raw: str) -> int:
+    """Номер из ввода человека; не число — ValueError."""
+    raw = raw.strip()
+    if not raw.isdigit():
+        raise ValueError("Номер — целое положительное число.")
+    return int(raw)
 
 
 def main(path: Path = NOTES_FILE) -> None:
@@ -90,13 +113,18 @@ def main(path: Path = NOTES_FILE) -> None:
                 print(format_notes(notes))
             elif choice == "3":
                 print(format_notes(notes))
-                raw = input("Номер: ").strip()
-                if not raw.isdigit():
-                    raise ValueError("Номер — целое положительное число.")
-                updated = delete_note(notes, int(raw))
+                updated = delete_note(notes, parse_number(input("Номер: ")))
                 save_notes(path, updated)
                 notes = updated
                 print("Удалено.")
+            elif choice == "4":
+                print(format_notes(notes))
+                number = parse_number(input("Номер: "))
+                _check_number(notes, number)  # до вопроса о тексте
+                updated = edit_note(notes, number, input("Новый текст: "))
+                save_notes(path, updated)
+                notes = updated
+                print("Изменено.")
             elif choice == "0":
                 break
             else:
