@@ -1,6 +1,6 @@
 """Заметки в консоли: добавить строку, показать все, удалить по номеру.
 
-Заметки хранятся в notes.json рядом со скриптом — JSON-список строк.
+Заметки хранятся в data/notes.json в корне проекта — JSON-список строк.
 Правила — чистые функции над списком; файл — load_notes/save_notes;
 ввод с клавиатуры и печать — только в main().
 """
@@ -10,7 +10,8 @@ import os
 import sys
 from pathlib import Path
 
-NOTES_FILE = Path(__file__).with_name("notes.json")
+# src/notes.py → корень проекта; верно при установке `pip install -e`.
+NOTES_FILE = Path(__file__).resolve().parents[1] / "data" / "notes.json"
 
 
 class StorageError(Exception):
@@ -35,6 +36,7 @@ def save_notes(path: Path, notes: list[str]) -> None:
 
     Замена атомарна, поэтому сбой посреди записи не портит прежний файл.
     """
+    path.parent.mkdir(parents=True, exist_ok=True)  # data/ нет в git
     tmp = path.with_name(path.name + ".tmp")
     tmp.write_text(json.dumps(notes, ensure_ascii=False, indent=2), encoding="utf-8")
     os.replace(tmp, path)

@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "zc-notes"
+version = "0.1.0"
+description = "Заметки в консоли с хранением в JSON"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+# Код — один модуль src/notes.py, не пакет: по условию задания.
+[tool.hatch.build.targets.wheel]
+only-include = ["src/notes.py"]
+sources = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

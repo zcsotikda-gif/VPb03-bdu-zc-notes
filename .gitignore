@@ -1,6 +1,5 @@
 # Заметки пользователя — личные данные, не код
-notes.json
-notes.json.tmp
+data/
 
 .venv/
 __pycache__/
